@@ -2,7 +2,7 @@ import os
 import django
 
 # Configure Django settings
-os.environ.setdefault('LIBRARYPROJECT_MODULE', 'LibraryProject.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_models.settings')
 django.setup()
 
 from relationship_app.models import Author, Book, Library, Librarian
@@ -44,10 +44,16 @@ def run_queries():
         print(f"  - {book.title}")
 
     # 2. List all books in a library.
-    print("\n2. Books in Central Library:")
-    central_library = Library.objects.get(name="Central Library")
-    for book in central_library.books.all():
-        print(f"  - {book.title}")
+    print("\n2. Books in a specified Library:")
+    # Using a variable for the library name
+    library_name = "Central Library"
+    try:
+        specific_library = Library.objects.get(name=library_name)
+        for book in specific_library.books.all():
+            print(f"  - {book.title}")
+    except Library.DoesNotExist:
+        print(f"  Library '{library_name}' not found.")
+
 
     # 3. Retrieve the librarian for a library.
     print("\n3. Librarian for Community Library:")
