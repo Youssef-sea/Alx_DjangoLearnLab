@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os # Ensure os is imported at the top
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -112,12 +112,19 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Add these lines for authentication redirects and static files
+LOGIN_REDIRECT_URL = '/app/books/'  # Redirect to the books list after successful login
+LOGOUT_REDIRECT_URL = '/app/login/' # Redirect to the login page after logout
+LOGIN_URL = '/app/login/'           # URL for the login page
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+# Define where Django will look for static files within your apps
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'), # This assumes you might have a project-level static folder
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
