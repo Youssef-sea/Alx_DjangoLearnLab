@@ -13,6 +13,6 @@ urlpatterns = [
          LoginView.as_view(template_name='relationship_app/login.html'), # <--- LoginView directly
          name='login'),
     path('logout/',
-         LogoutView.as_view(next_page=reverse_lazy('relationship_app:login'), template_name='relationship_app/logout.html'), # <--- LogoutView directly
+         LogoutView.as_view(template_name='relationship_app/logout.html'), # <--- LogoutView directly
          name='logout'),
 ]
