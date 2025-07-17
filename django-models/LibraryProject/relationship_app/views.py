@@ -5,7 +5,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login as auth_login
-from django.contrib.auth.decorators import user_passes_test, permission_required
+from django.contrib.auth.decorators import user_passes_test 
+from django.contrib.auth.decorators import permission_required
 
 from .models import Book, UserProfile, Author 
 from .models import Library # Import Library for the class-based view
