@@ -1,6 +1,6 @@
 # relationship_app/urls.py
 from django.urls import path
-from .views import list_books, LibraryDetailView, register, CustomLoginView, CustomLogoutView, admin_view, librarian_view, member_view, book_create, book_update, book_delete 
+from .views import list_books, LibraryDetailView, register, CustomLoginView, CustomLogoutView, admin_view, librarian_view, member_view, add_book, edit_book, delete_book 
 
 app_name = 'relationship_app' # Namespace for the app's URLs
 
@@ -23,8 +23,8 @@ urlpatterns = [
     path('member_dashboard/', member_view, name='member_view'),  
  
 # NEW: URLs for custom permission-based book actions
-    path('books/add/', book_create, name='book_create'),
-    path('books/<int:pk>/edit/', book_update, name='book_update'),
-    path('books/<int:pk>/delete/', book_delete, name='book_delete'),
+    path('books/add/', add_book, name='add_book'),
+    path('books/<int:pk>/edit/', edit_book, name='edit_book'),
+    path('books/<int:pk>/delete/', delete_book, name='delete_book'),
 
 ]
