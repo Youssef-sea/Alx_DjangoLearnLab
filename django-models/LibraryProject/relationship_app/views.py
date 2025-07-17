@@ -3,8 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic.detail import DetailView
 from .models import Book, 
 from .models import Library # Import Library for the class-based view
-from django.contrib.auth.views import Login,
-from django.contrib.auth.views import Logout,
+from django.contrib.auth import Login,
+from django.contrib.auth import Logout,
 from django.contrib.auth.forms import UserCreationForm # For registration
 from django.urls import reverse_lazy # For redirects in class-based views
 
