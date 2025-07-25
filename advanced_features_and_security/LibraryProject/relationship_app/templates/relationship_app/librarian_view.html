@@ -1,0 +1,17 @@
+<!-- librarian_view.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Librarian Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Librarian Dashboard</h1>
+    <p>{{ message }}</p>
+    <p>This page is only accessible to users with the 'Librarian' role.</p>
+    <p><a href="{% url 'relationship_app:logout' %}">Logout</a></p>
+    <p><a href="{% url 'relationship_app:book_list' %}">Back to Books</a></p>
+</body>
+</html>
