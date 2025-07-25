@@ -2,6 +2,8 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
+
 
 class Book(models.Model):
     """
@@ -69,3 +71,21 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class Article(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    published_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        permissions = [
+            ("can_view_article", "Can view article"),
+            ("can_create_article", "Can create article"),
+            ("can_edit_article", "Can edit article"),
+            ("can_delete_article", "Can delete article"),
+        ]
+        ordering = ['-published_date']
+
+    def __str__(self):
+        return self.title
