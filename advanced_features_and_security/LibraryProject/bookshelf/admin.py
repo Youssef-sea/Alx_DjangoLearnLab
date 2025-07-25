@@ -2,6 +2,8 @@
 
 from django.contrib import admin
 from .models import Book # Import the Book model from the current app's models.py
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 
 # Register your models here.
 
@@ -10,6 +12,7 @@ from .models import Book # Import the Book model from the current app's models.p
 
 # Option 2: Register with a custom ModelAdmin for enhanced features
 @admin.register(Book) # This decorator registers the Book model with the admin site
+
 class BookAdmin(admin.ModelAdmin):
     """
     Customizes the display and functionality of the Book model in the Django admin.
@@ -42,3 +45,23 @@ class BookAdmin(admin.ModelAdmin):
     #         'classes': ('collapse',), # Makes this section collapsible
     #     }),
     # )
+
+class CustomUserAdmin(UserAdmin):
+    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'date_of_birth')
+    add_fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'date_of_birth', 'profile_photo')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    fieldsets = (
+        (None, {'fields': ('email',)}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'date_of_birth', 'profile_photo')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    search_fields = ('email',)
+    ordering = ('email',)
+    filter_horizontal = ('groups', 'user_permissions',)
+
+admin.site.register(CustomUser, CustomUserAdmin)
