@@ -23,10 +23,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)v#n7r5e4%ka=p42!f1p2g1&$@xt=114$3xgj^(0n(q2%0u+%1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourdomain.com', 'localhost', '127.0.0.1']
 
+# CSRF_COOKIE_SECURE and SESSION_COOKIE_SECURE ensure cookies are only sent over HTTPS.
+# Essential for production.
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Protect against XSS by enabling the browser's XSS filter.
+SECURE_BROWSER_XSS_FILTER = True
+
+# Protect against clickjacking by denying framing of the page.
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevent browsers from MIME-sniffing a response away from the declared content-type.
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Application definition
 
@@ -40,11 +53,13 @@ INSTALLED_APPS = [
     'bookshelf',  
     'relationship_app', 
     'accounts',  # Add your new app here
+    'csp',
     # ... other apps 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,6 +67,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Path where Django will store uploaded media files.
+# Make sure you have a 'media' directory in your project root or configure as needed.
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
@@ -135,3 +156,45 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ...
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser' # Add this line
+
+# advanced_features_and_security/advanced_features_and_security/settings.py
+
+# ... (previous security settings) ...
+
+# Content Security Policy (CSP) settings
+# --------------------------------------------------------------------------
+
+# Default-src: What sources are allowed by default for all content types
+CSP_DEFAULT_SRC = ("'self'",) # Allow content from same origin
+
+# Script-src: Where scripts can be loaded from
+# If you use inline scripts (e.g., <script>alert('Hi')</script>), you'll need 'unsafe-inline'
+# or nonces/hashes. 'strict-dynamic' is a more advanced secure approach.
+# For simplicity, if you have no inline scripts and only use scripts from your domain:
+CSP_SCRIPT_SRC = ("'self'",)
+# Example if you use Google Analytics or other external scripts:
+# CSP_SCRIPT_SRC = ("'self'", "https://www.googletagmanager.com", "https://www.google-analytics.com")
+
+
+# Style-src: Where stylesheets can be loaded from
+CSP_STYLE_SRC = ("'self'",)
+# If you use inline styles or external CSS from CDNs:
+# CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net")
+
+# Img-src: Where images can be loaded from
+CSP_IMG_SRC = ("'self'", "data:",) # 'data:' allows data URIs for images
+
+# Font-src: Where fonts can be loaded from
+CSP_FONT_SRC = ("'self'",) # Example if using Google Fonts: "https://fonts.gstatic.com"
+
+# Connect-src: Where connect (XHR, WebSockets) can connect to
+CSP_CONNECT_SRC = ("'self'",)
+
+# Frame-ancestors: Prevents clickjacking for iframes/frames (stronger than X_FRAME_OPTIONS)
+# Can replace X_FRAME_OPTIONS if set to 'none' or specific origins.
+# CSP_FRAME_ANCESTORS = ("'none'",) # Disallow framing entirely
+
+# Report-URI: Where to send CSP violation reports (optional, but recommended for monitoring)
+# CSP_REPORT_URI = "/csp-report/" # You would need to set up a view to handle these reports
+
+# CSP_REPORT_ONLY = True # Set to True during development to log violations without blocking

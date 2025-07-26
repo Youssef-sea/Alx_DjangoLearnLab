@@ -1,0 +1,7 @@
+<h1>{{ form_type }} Article</h1>
+<form method="post">
+    {% csrf_token %} {# Make sure this line is present! #}
+    {{ form.as_p }}
+    <button type="submit">{{ form_type }}</button>
+</form>
+<a href="{% url 'article_list' %}">Cancel</a>
