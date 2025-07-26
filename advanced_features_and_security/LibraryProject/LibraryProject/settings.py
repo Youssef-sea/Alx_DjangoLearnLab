@@ -40,6 +40,7 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Prevent browsers from MIME-sniffing a response away from the declared content-type.
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
 # HTTPS and Security Headers Configuration
 # --------------------------------------------------------------------------
 
@@ -64,6 +65,11 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # This offers protection even on the very first visit. Requires submitting your domain
 # to the HSTS preload list (hstspreload.org).
 SECURE_HSTS_PRELOAD = True
+
+# When Django is behind a reverse proxy (like Nginx or Apache) that handles SSL termination,
+# this setting tells Django which header indicates a secure connection.
+# The proxy must be configured to send the X-Forwarded-Proto header with 'https'.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Step 2: Enforce Secure Cookies
 # Ensures session cookies are only transmitted over HTTPS, preventing them from being
