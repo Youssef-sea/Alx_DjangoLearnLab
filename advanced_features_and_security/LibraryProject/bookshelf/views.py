@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, book_list, books,
 from django.urls import reverse_lazy
 from .models import Article
-from .forms import ArticleForm # We'll create this form next
+from .forms import ExampleForm # We'll create this form next
 
 # Function-based views with decorators
 @permission_required('blog.can_view_article', raise_exception=True)
@@ -22,26 +22,26 @@ def article_detail(request, pk):
 @permission_required('blog.can_create_article', raise_exception=True)
 def article_create(request):
     if request.method == 'POST':
-        form = ArticleForm(request.POST)
+        form = ExampleForm(request.POST)
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
             article.save()
             return redirect('article_detail', pk=article.pk)
     else:
-        form = ArticleForm()
+        form = ExampleForm()
     return render(request, 'blog/article_form.html', {'form': form, 'form_type': 'Create'})
 
 @permission_required('blog.can_edit_article', raise_exception=True)
 def article_edit(request, pk):
     article = get_object_or_404(Article, pk=pk)
     if request.method == 'POST':
-        form = ArticleForm(request.POST, instance=article)
+        form = ExampleForm(request.POST, instance=article)
         if form.is_valid():
             form.save()
             return redirect('article_detail', pk=article.pk)
     else:
-        form = ArticleForm(instance=article)
+        form = ExampleForm(instance=article)
     return render(request, 'blog/article_form.html', {'form': form, 'form_type': 'Edit'})
 
 @permission_required('blog.can_delete_article', raise_exception=True)
@@ -68,7 +68,7 @@ def article_delete(request, pk):
 # class ArticleCreateView(PermissionRequiredMixin, CreateView):
 #     permission_required = 'blog.can_create_article'
 #     model = Article
-#     form_class = ArticleForm
+#     form_class = ExampleForm
 #     template_name = 'blog/article_form.html'
 #     success_url = reverse_lazy('article_list') # Redirect to list after creation
 
@@ -79,7 +79,7 @@ def article_delete(request, pk):
 # class ArticleUpdateView(PermissionRequiredMixin, UpdateView):
 #     permission_required = 'blog.can_edit_article'
 #     model = Article
-#     form_class = ArticleForm
+#     form_class = ExampleForm
 #     template_name = 'blog/article_form.html'
 #     success_url = reverse_lazy('article_list')
 
