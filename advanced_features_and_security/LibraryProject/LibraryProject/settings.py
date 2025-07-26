@@ -40,6 +40,53 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Prevent browsers from MIME-sniffing a response away from the declared content-type.
 SECURE_CONTENT_TYPE_NOSNIFF = True
+# HTTPS and Security Headers Configuration
+# --------------------------------------------------------------------------
+
+# Step 1: Configure Django for HTTPS Support
+# Redirect all non-HTTPS requests to HTTPS.
+# IMPORTANT: Only set to True when your server is fully configured for HTTPS.
+# Otherwise, you might experience redirect loops or access issues.
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS) settings.
+# Instructs browsers to only access the site via HTTPS for the specified time.
+# This prevents downgrade attacks and cookie hijacking on insecure connections.
+# SECURE_HSTS_SECONDS is set to 31536000 seconds (1 year).
+# IMPORTANT: Only enable this after you are certain your site will serve HTTPS consistently.
+# Browsers will remember this for the duration set.
+SECURE_HSTS_SECONDS = 31536000 # 1 year
+
+# SECURE_HSTS_INCLUDE_SUBDOMAINS extends the HSTS policy to all subdomains.
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# SECURE_HSTS_PRELOAD allows your domain to be preloaded into browsers' HSTS lists.
+# This offers protection even on the very first visit. Requires submitting your domain
+# to the HSTS preload list (hstspreload.org).
+SECURE_HSTS_PRELOAD = True
+
+# Step 2: Enforce Secure Cookies
+# Ensures session cookies are only transmitted over HTTPS, preventing them from being
+# intercepted on insecure connections.
+SESSION_COOKIE_SECURE = True
+
+# Ensures CSRF tokens are only transmitted over HTTPS, protecting against CSRF attacks
+# by ensuring the token is not leaked on insecure connections.
+CSRF_COOKIE_SECURE = True
+
+# Step 3: Implement Secure Headers
+# Prevents your site from being embedded in iframes on other domains, protecting
+# against clickjacking attacks. 'DENY' completely blocks framing.
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevents browsers from MIME-sniffing a response away from the declared content-type.
+# This helps prevent XSS attacks where content might be misinterpreted.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enables the browser's built-in XSS filter. While modern browsers handle XSS well,
+# this adds an explicit header to instruct the browser to engage its filter.
+SECURE_BROWSER_XSS_FILTER = True
+
 
 # Application definition
 
