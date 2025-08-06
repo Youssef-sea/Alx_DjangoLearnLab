@@ -3,6 +3,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend 
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 
@@ -20,7 +21,7 @@ class BookListView(generics.ListAPIView):
     # --- Filtering Configuration ---
     # Specifies the filter backends to use for this view.
     filter_backends = [
-        filters.DjangoFilterBackend,  # For exact/range filtering
+        DjangoFilterBackend,   # For exact/range filtering
         filters.SearchFilter,         # For text searching
         filters.OrderingFilter        # For sorting results
     ]
