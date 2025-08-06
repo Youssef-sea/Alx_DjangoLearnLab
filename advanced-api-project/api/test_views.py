@@ -27,7 +27,9 @@ class BookAPITests(APITestCase):
         self.admin_user = User.objects.create_superuser(username='adminuser', password='adminpassword')
         self.admin_token = Token.objects.create(user=self.admin_user)
 
-        # Create an authenticated client
+        # Create an authenticated client for API requests using Token Authentication.
+        # We use .credentials() to set the Authorization header with the token.
+        # self.client.login() is typically used for session-based authentication.
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
