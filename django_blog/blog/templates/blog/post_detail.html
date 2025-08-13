@@ -1,31 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-    <article>
-        </article>
-
     <hr>
     <h3>Comments ({{ post.comments.count }})</h3>
     {% if user.is_authenticated %}
-        <form method="post" action="{% url 'post-detail' post.pk %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Post Comment</button>
-        </form>
+        <p><a href="{% url 'comment-create' post.pk %}">Add a new comment</a></p>
     {% else %}
         <p><a href="{% url 'login' %}">Log in</a> to post a comment.</p>
     {% endif %}
     
     <div class="comments-section">
         {% for comment in post.comments.all %}
-            <div class="comment">
-                <p>{{ comment.content }}</p>
-                <small>by {{ comment.author.username }} on {{ comment.created_at|date:"F d, Y" }}</small>
-                {% if user.is_authenticated and user == comment.author %}
-                    <a href="{% url 'comment-update' comment.pk %}">Edit</a>
-                    <a href="{% url 'comment-delete' comment.pk %}">Delete</a>
-                {% endif %}
-            </div>
-        {% empty %}
+            {% empty %}
             <p>No comments yet.</p>
         {% endfor %}
     </div>
