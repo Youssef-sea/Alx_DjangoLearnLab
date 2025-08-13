@@ -73,3 +73,12 @@ footer {
     color: #fff;
     margin-top: auto;
 }
+
+.tag-input {
+    border: 1px solid #ccc;
+    padding: 8px;
+    width: 100%;
+    border-radius: 4px;
+    font-size: 16px;
+    /* Add any other custom styles here */
+}
