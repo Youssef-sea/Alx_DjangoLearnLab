@@ -1,5 +1,6 @@
 # blog/views.py
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.forms import UserCreationForm
@@ -9,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from .models import Post, Comment
+from taggit.models import Tag 
 from .forms import PostForm, CommentForm
 
 # Registration View
@@ -140,3 +142,24 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('post-detail', kwargs={'pk': self.kwargs['pk']})
+
+class PostSearchView(ListView):
+    model = Post
+    template_name = 'blog/post_search_results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            # Search across title, content, and tags
+            return Post.objects.filter(
+                Q(title__icontains=query) | 
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query) # <-- Search by tag name
+            ).distinct()
+        return Post.objects.none()
+
+def tagged_posts_view(request, tag_slug):
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    posts = Post.objects.filter(tags__in=[tag])
+    return render(request, 'blog/tagged_posts.html', {'posts': posts, 'tag': tag})

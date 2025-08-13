@@ -7,7 +7,12 @@
     {% else %}
         <p><a href="{% url 'login' %}">Log in</a> to post a comment.</p>
     {% endif %}
-    
+        <p>Tags: 
+            {% for tag in post.tags.all %}
+                <a href="{% url 'tagged-posts' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>    
+
     <div class="comments-section">
         {% for comment in post.comments.all %}
             {% empty %}

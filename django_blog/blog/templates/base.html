@@ -17,7 +17,11 @@
             {% else %}
                 <a href="{% url 'login' %}">Login</a>
                 <a href="{% url 'register' %}">Register</a>
-            {% endif %}
+            {% endif %}	    <!-- ... other nav links ... -->
+	    <form action="{% url 'post-search' %}" method="get">
+	        <input type="text" name="q" placeholder="Search blog posts...">
+	        <button type="submit">Search</button>
+	    </form>
         </nav>
     </header>
     <main>

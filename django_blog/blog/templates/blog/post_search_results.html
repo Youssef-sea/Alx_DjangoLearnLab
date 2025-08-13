@@ -1,0 +1,15 @@
+<!-- blog/templates/blog/post_search_results.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Search Results</h2>
+    {% if posts %}
+        <p>{{ posts.count }} post(s) found for "{{ request.GET.q }}"</p>
+        <ul>
+            {% for post in posts %}
+                <li><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No posts found for "{{ request.GET.q }}".</p>
+    {% endif %}
+{% endblock %}
