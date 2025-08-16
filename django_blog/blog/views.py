@@ -13,7 +13,7 @@ from .models import Post, Comment
 from taggit.models import Tag 
 from .forms import PostForm, CommentForm
 
-# Registration View
+# blog View
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -23,7 +23,7 @@ def register(request):
             return redirect('profile')
     else:
         form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'blog/register.html', {'form': form})
 
 # Profile View
 @login_required
@@ -36,7 +36,7 @@ def profile(request):
             request.user.save()
             # Add a message to the user confirming the update
             return redirect('profile')
-    return render(request, 'registration/profile.html', {'user': request.user})
+    return render(request, 'blog/profile.html', {'user': request.user})
 
 # List all blog posts
 class PostListView(ListView):
