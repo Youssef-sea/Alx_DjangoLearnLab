@@ -14,12 +14,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {'email': {'required': True}}
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(
+        # This is where the requested code is inserted.
+        # This logic is not idiomatic for DRF.
+        user = get_user_model().objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'],
             bio=validated_data.get('bio', '')
         )
+        Token.objects.create(user=user)
         return user
 
 class UserLoginSerializer(serializers.Serializer):
