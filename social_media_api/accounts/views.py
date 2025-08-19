@@ -44,3 +44,29 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+class FollowUnfollowView(generics.GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            user_to_follow = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user == user_to_follow:
+            return Response({"error": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the user is already following the target user
+        is_following = request.user.following.filter(pk=user_to_follow.pk).exists()
+
+        if is_following:
+            # Unfollow the user
+            request.user.following.remove(user_to_follow)
+            message = f"You have unfollowed {user_to_follow.username}."
+        else:
+            # Follow the user
+            request.user.following.add(user_to_follow)
+            message = f"You are now following {user_to_follow.username}."
+
+        return Response({"message": message}, status=status.HTTP_200_OK)
