@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer
 from .models import CustomUser
 
@@ -44,6 +45,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
 class FollowUnfollowView(generics.GenericAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -70,3 +72,4 @@ class FollowUnfollowView(generics.GenericAPIView):
             message = f"You are now following {user_to_follow.username}."
 
         return Response({"message": message}, status=status.HTTP_200_OK)
+
