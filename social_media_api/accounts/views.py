@@ -3,7 +3,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import permissions.IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
@@ -41,14 +41,14 @@ class LoginView(generics.GenericAPIView):
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user
 
 class FollowUnfollowView(generics.GenericAPIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
         try:
