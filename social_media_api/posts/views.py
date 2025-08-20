@@ -77,3 +77,5 @@ class LikeUnlikeView(generics.GenericAPIView):
                 )
             
             return Response({'message': 'Post liked successfully.'}, status=status.HTTP_201_CREATED)
+
+generics.get_object_or_404(Post, pk=pk)", "Like.objects.get_or_create(user=request.user, post=post)"
