@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
+from notifications.models import Notification 
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
@@ -47,3 +48,31 @@ class FeedView(generics.ListAPIView):
         
         # Filter posts by those authors and order them by creation date.
         return Post.objects.filter(author__in=following_users).order_by('-created_at')
+
+class LikeUnlikeView(generics.GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, pk):
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
+        
+        try:
+            # Check if a like from this user on this post already exists
+            like = Like.objects.get(user=user, post=post)
+            like.delete()
+            return Response({'message': 'Post unliked successfully.'}, status=status.HTTP_200_OK)
+        except Like.DoesNotExist:
+            # If it doesn't exist, create a new one
+            Like.objects.create(user=user, post=post)
+            
+            # Create a notification for the post's author
+            if user != post.author:
+                Notification.objects.create(
+                    recipient=post.author,
+                    actor=user,
+                    verb='liked your post',
+                    target=post
+                )
+            
+            return Response({'message': 'Post liked successfully.'}, status=status.HTTP_201_CREATED)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'posts.apps.PostsConfig',
     'django_filters',
+    'notifications.apps.NotificationsConfig',
 ]
 
 MIDDLEWARE = [
